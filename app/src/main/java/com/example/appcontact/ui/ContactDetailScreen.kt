@@ -27,17 +27,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import com.example.appcontact.R
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.appcontact.model.ContactEntity
 import com.example.appcontact.model.ContactViewModel
+import com.example.appcontact.utils.openDialer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ContactDetailScreen(viewModel: ContactViewModel, contactId: Int, navController: NavHostController) {
+fun ContactDetailScreen(viewModel: ContactViewModel,
+                        contactId: Int,
+                        navController: NavHostController
+) {
     val contact = remember { mutableStateOf<ContactEntity?>(null) }
+    val context = LocalContext.current
 
     LaunchedEffect(contactId) {
         contact.value = viewModel.getContactById(contactId)
@@ -110,11 +116,17 @@ fun ContactDetailScreen(viewModel: ContactViewModel, contactId: Int, navControll
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Call,
-                            contentDescription = "Call",
-                            modifier = Modifier.size(24.dp)
-                        )
+                        contact.value?.let {
+                            IconButton(onClick = {
+                                openDialer(context = context, phone = it.phone)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Call,
+                                    contentDescription = "Call",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = it.phone,
@@ -143,7 +155,7 @@ fun ContactDetailScreen(viewModel: ContactViewModel, contactId: Int, navControll
                         Text(
                             text = it.phone,
                             style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                            modifier = Modifier.weight(1f).padding(start = 16.dp)
                         )
                         IconButton(onClick = { /* Video Call action */ }) {
                             Icon(

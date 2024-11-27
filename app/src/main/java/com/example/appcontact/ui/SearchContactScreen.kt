@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,8 @@ import com.example.appcontact.R
 import com.example.appcontact.model.ContactEntity
 import com.example.appcontact.model.ContactViewModel
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import com.example.appcontact.utils.openDialer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,6 +79,7 @@ fun SearchContactScreen(viewModel: ContactViewModel, navController: NavHostContr
 }
 @Composable
 fun ContactRow(contact: ContactEntity, onClick: () -> Unit) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,6 +110,11 @@ fun ContactRow(contact: ContactEntity, onClick: () -> Unit) {
                 style = MaterialTheme.typography.titleLarge, // Font chữ lớn
                 modifier = Modifier.weight(1f)
             )
+//            IconButton(onClick = {
+//                openDialer(context = context, phone = contact.phone)
+//            }) {
+//                Icon(imageVector = Icons.Default.Call, contentDescription = "Call")
+//            }
         }
     }
 }
